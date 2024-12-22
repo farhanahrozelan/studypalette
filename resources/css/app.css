@@ -1,0 +1,367 @@
+@tailwind base; 
+@tailwind components;
+@tailwind utilities;
+
+/* Hide elements using x-cloak */
+[x-cloak] {
+    display: none;
+}
+
+/* Reset base margins and paddings */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+}
+
+/* Custom background opacity class */
+.bg-opacity::before {
+
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.2; /* Adjust opacity */
+    z-index: 0;
+}
+
+.bg-opacity > * {
+    position: relative;
+    z-index: 10; /* Ensure content stays above background */
+}
+
+/* Sidebar styles */
+.sidebar { 
+    width: 220px; 
+    height: 100%; 
+    background-color: #FBF9F1; 
+    padding-top: 130px; 
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); 
+    transition: transform 0.3s ease, width 0.3s ease; 
+    z-index: 100; 
+    overflow: hidden;
+}
+
+.sidebar.collapsed { 
+    width: 75px; 
+}
+
+.sidebar ul { 
+    list-style-type: none; 
+    padding: 0; 
+}
+
+.sidebar ul li { 
+    padding: 14px 20px; 
+    border-radius: 10px; 
+    margin: 0 10px 10px; 
+    background-color: #c2837a; 
+    white-space: nowrap; 
+    overflow: hidden; 
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); 
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.sidebar ul li:hover { 
+    transform: translateY(-2px); 
+    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.15); 
+    background-color: #7c3f3f; 
+    cursor: pointer; 
+}
+
+.sidebar ul li a { 
+    color: rgb(255, 255, 255); 
+    text-decoration: none; 
+    font-size: 16px; 
+    display: block; 
+    transition: background-color 0.3s ease; 
+}
+
+.sidebar ul li a i { 
+    margin-right: 22px;  
+}
+
+.sidebar ul li a span { 
+    display: inline-block; 
+    transition: opacity 0.3s ease; 
+}
+
+.sidebar.collapsed ul li a span { 
+    display: none; 
+}
+
+.sidebar ul li a:hover { 
+    color: #ffffff; 
+    padding: 2px; 
+}
+
+/* Sidebar toggle button */
+.toggle-btn { 
+    position: fixed; 
+    top: 70px; 
+    left: 180px; 
+    color: #DBA39A;
+    background-color:#FBF9F1; 
+    border: none; 
+    padding: 10px; 
+    font-size: 20px; 
+    cursor: pointer; 
+    transition: left 0.3s ease; 
+    z-index: 110; 
+}
+
+.collapsed .toggle-btn { 
+    left: 22px; 
+}
+
+.min-h-screen {
+    margin-top: 50px; /* Matches navbar height */
+}
+
+/* Navbar link styles */
+.nav-link {
+    border-bottom: none; 
+}
+
+.nav-link h1 {
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+}
+
+/* Main content styles */
+.main-content { 
+    margin-left: 70px; 
+    padding: 10px; 
+    flex: 1; 
+    background-color: #f3f4f6; 
+    transition: margin-left 0.3s ease; 
+}
+
+.sidebar.collapsed + .main-content { 
+    margin-left: 0; /* Keep the content in place */
+}
+
+/* General Styles */
+.dashboard-content {
+    display: flex;
+    flex-wrap: nowrap; /* Keeps sections side-by-side */
+    gap: 2rem;
+    padding: 1.5rem;
+    background-color: #f3f4f6;
+    align-items: flex-start; /* Align elements at the top */
+    transition: margin-left 0.3s ease; /* For smooth transition when sidebar opens */
+
+}
+
+/*  To-Do Boxes */
+.todo-box {
+    background-color: #ffffff;
+    border-radius: 0.5rem;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.todo-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.15);
+}
+/* Calendar Table Container */
+.calendar {
+    width: 100%;
+    margin: 0 auto;
+    font-family: "Poppins", sans-serif;
+    font-size: 0.9rem;
+    position: relative; /* Ensures it stays within layout */
+    text-align: center; /* Center content inside the calendar */
+}
+
+/* Table Styles */
+.calendar table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0.5rem;
+}
+
+.calendar table th {
+    background-color: #f3f4f6; /* Light gray background */
+    color: #4b5563; /* Dark gray text */
+    padding: 0.75rem;
+    font-weight: 300;
+    text-align: center;
+    border-bottom: 1px solid #e5e7eb; /* Border below header */
+}
+
+.calendar table td {
+    text-align: center;
+    padding: 0.75rem;
+    border: 1px solid #e5e7eb; /* Border around cells */
+    transition: background-color 0.3s ease, color 0.3s ease;
+    vertical-align: middle; /* Center align cell content */
+}
+
+/* Hover Effect for Dates */
+.calendar table td:hover {
+    background-color: #f9fafb; /* Light hover effect */
+    color: #1f2937; /* Dark text on hover */
+}
+
+/* Highlight Active Date */
+.calendar table td.active {
+    background-color: #fde68a; /* Yellow background for active date */
+    color: #111827; /* Dark text for active date */
+    font-weight: bold;
+}
+
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .calendar table th, .calendar table td {
+        padding: 0.5rem; /* Adjust padding for smaller screens */
+        font-size: 0.8rem; /* Smaller font size */
+    }
+}
+
+/* Utility Classes */
+.text-lg {
+    font-size: 1.125rem;
+}
+
+.font-semibold {
+    font-weight: 600;
+}
+
+.text-center {
+    text-align: center;
+}
+
+/* Flashcard Container */
+.flashcard-container {
+    position: relative;
+    width: 300px;
+    height: 200px;
+    margin: 20px auto;
+    perspective: 1000px; /* Required for 3D effect */
+}
+
+/* Flashcard */
+.flashcard {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transform-style: preserve-3d;
+    transform: rotateY(0);
+    transition: transform 0.5s ease;
+    display: none;
+}
+
+.flashcard.active {
+    display: block;
+}
+
+.flashcard .front,
+.flashcard .back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+}
+
+.flashcard .front {
+    background: #f8f9fa;
+}
+
+.flashcard .back {
+    background: #acdfb8;
+    transform: rotateY(180deg);
+}
+
+.flashcard.flipped {
+    transform: rotateY(180deg);
+}
+
+/* Navigation Buttons */
+.navigation {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.navigation button {
+    margin: 0 10px;
+    padding: 10px 20px;
+    background-color: #548ac4;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.navigation button:disabled {
+    background-color: #ddd;
+    cursor: not-allowed;
+}
+
+/* Customize Toast Style */
+.toastr {
+    font-family: 'Arial', sans-serif;
+    font-size: 14px;
+}
+
+.toast-top-right {
+    top: 15px;
+    right: 15px;
+}
+
+#delete-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+#delete-modal .bg-white {
+    width: 400px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#delete-modal button {
+    padding: 10px 20px;
+    font-size: 16px;
+}
+
+#delete-modal #confirm-btn {
+    background-color: #e53e3e;
+    color: white;
+    border-radius: 4px;
+}
+
+#delete-modal #cancel-btn {
+    background-color: #e2e8f0;
+    color: #4a5568;
+    border-radius: 4px;
+}
