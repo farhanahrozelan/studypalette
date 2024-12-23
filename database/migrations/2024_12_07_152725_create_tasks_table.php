@@ -17,6 +17,8 @@ return new class extends Migration
             $table->boolean('is_done')->default(false);
             $table->unsignedBigInteger('user_id'); // Add user_id column
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade'); // Foreign key relationship
+            $table->unsignedBigInteger('user_id')->nullable()->after('is_done');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

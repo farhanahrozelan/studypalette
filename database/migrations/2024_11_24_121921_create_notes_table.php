@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('notes', function (Blueprint $table) {
+        Schema::create('notes', function (Blueprint $table) {
             $table->id();
             $table->string('title');
             $table->text('key_points')->nullable();
@@ -20,8 +20,9 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id'); // Add user_id column
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade'); // Foreign key relationship
             $table->timestamps();
-          });
+        });
     }
+    
 
     /**
      * Reverse the migrations. 

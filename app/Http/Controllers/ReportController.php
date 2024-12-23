@@ -25,6 +25,32 @@ class ReportController extends Controller
         return redirect()->back()->with('success', 'The note has been reported.');
     }
 
+    public function index() 
+    { 
+        $reportedNotes = Report::with('note', 'creator')->where('status', 'reported')->get(); 
+        return view('reportedNotes', compact('reportedNotes')); 
+    } 
+     
+    public function review($noteId, $action) 
+    { 
+        $reportedNote = Report::where('note_id', $noteId)->first(); 
+        if (!$reportedNote) { 
+            return response()->json(['success' => false, 'message' => 'Note not found.']); 
+        } 
+         
+        if ($action === 'approve') { 
+            $reportedNote->status = 'approved'; 
+            $reportedNote->save(); 
+            Note::where('id', $noteId)->update(['status' => 'approved']); 
+        } elseif ($action === 'disapprove') { 
+            $reportedNote->status = 'disapproved'; 
+            $reportedNote->save(); 
+            Note::where('id', $noteId)->update(['status' => 'disapproved']); 
+        } 
+         
+        return response()->json(['success' => true, 'message' => "Note {$action}d successfully."]); 
+    }
+
     
 
     

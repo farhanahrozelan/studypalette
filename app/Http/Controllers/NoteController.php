@@ -129,5 +129,50 @@ class NoteController extends Controller
     return view('notes.show-shared', compact('note'));
 }
 
+public function handleNoteUpload(Request $request) 
+{ 
+    $noteTitle = $request->input('title'); //Get the note title 
+    $noteContent = $request->input('notes'); //Get the note content 
+    $noteKeyPoints = $request->input('key_points'); //Get the note key points 
+    $noteSummary = $request->input('summary'); //Get the note summary 
+    $createdBy = $request->input('user_id'); //Get who created the note 
+
+    //Save the note with an 'approved' status directly 
+    $note = new Note(); 
+    $note->title = $noteTitle; 
+    $note->notes = $noteContent; 
+    $note->key_points = $noteKeyPoints; 
+    $note->summary = $noteSummary; 
+    $note->user_id = $createdBy; 
+    $note->status = 'approved'; // Automatically approve the note 
+    $note->save(); 
+
+    // Return a success response 
+    return response()->json(['message' => 'Note approved successfully']); 
+
+} 
+
+public function updateNoteStatus(Request $request, $noteId) 
+{ 
+    $note = Note::find($noteId); 
+     
+    if (!$note) { 
+        return redirect()->back()->with('error', 'Note not found.'); 
+    } 
+     
+    // Update based on admin action 
+    $action = $request->input('action'); // 'approve' or 'disapprove' 
+     
+    if ($action === 'approve') { 
+        $note->status = 'approved';             
+    } elseif ($action === 'disapprove') { 
+        $note->status = 'disapproved'; 
+    } 
+     
+    $note->save(); 
+     
+    return redirect()->back()->with('success', 'Note status updated successfully.'); 
+}
+
     
 }
