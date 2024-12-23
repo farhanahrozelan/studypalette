@@ -12,15 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('tasks', function (Blueprint $table) {
-            $table->id();
-            $table->string('title');
-            $table->boolean('is_done')->default(false);
-            $table->unsignedBigInteger('user_id'); // Add user_id column
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade'); // Foreign key relationship
-            $table->unsignedBigInteger('user_id')->nullable()->after('is_done');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->timestamps();
+            $table->id(); // Primary key
+            $table->string('title'); // Task title
+            $table->boolean('is_done')->default(false); // Task status
+            $table->unsignedBigInteger('user_id')->nullable(); // Foreign key column
+            $table->foreign('user_id') // Foreign key constraint
+                  ->references('id')->on('users')
+                  ->onDelete('cascade');
+            $table->timestamps(); // Created and updated timestamps
         });
+        
     }
 
     /**
