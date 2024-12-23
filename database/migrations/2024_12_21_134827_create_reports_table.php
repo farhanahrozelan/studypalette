@@ -13,6 +13,7 @@ class CreateReportsTable extends Migration
             $table->unsignedBigInteger('note_id');
             $table->unsignedBigInteger('user_id');
             $table->text('reason')->nullable();
+            $table->enum('status', ['reported', 'approved', 'disapproved'])->default('reported');
             $table->timestamps();
 
             // Foreign keys

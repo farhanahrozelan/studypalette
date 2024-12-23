@@ -27,7 +27,7 @@ class ReportController extends Controller
 
     public function index() 
     { 
-        $reportedNotes = Report::with('note', 'creator')->where('status', 'reported')->get(); 
+        $reportedNotes = Report::with('note', 'user')->where('status', 'reported')->get(); 
         return view('reportedNotes', compact('reportedNotes')); 
     } 
      

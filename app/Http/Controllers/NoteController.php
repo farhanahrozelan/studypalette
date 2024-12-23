@@ -129,6 +129,24 @@ class NoteController extends Controller
     return view('notes.show-shared', compact('note'));
 }
 
+public function storeSharedNotes(Request $request)
+{
+    // Validate the input
+    $validatedData = $request->validate([
+        'note_id' => 'required|exists:notes,id',
+        'shared_with' => 'required|email',
+    ]);
+
+    // Logic to store the shared note
+    SharedNote::create([
+        'note_id' => $validatedData['note_id'],
+        'shared_with' => $validatedData['shared_with'],
+    ]);
+
+    // Redirect or return a response
+    return redirect()->route('notes.shared')->with('success', 'Note shared successfully!');
+}
+
 public function handleNoteUpload(Request $request) 
 { 
     $noteTitle = $request->input('title'); //Get the note title 

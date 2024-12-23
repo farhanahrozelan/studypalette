@@ -23,7 +23,7 @@
                                 <h2 class="text-lg font-semibold text-gray-800">{{ $note->title }}</h2>
                                 <!-- Share Button (Only visible if the note is not already shared) -->
                                 @if (!$note->is_shared)
-                                    <form action="{{ route('notes.shared', $note->id) }}" method="POST">
+                                    <form action="{{ route('notes.share', ['note' => $note->id]) }}" method="POST">
                                         @csrf
                                         <button type="submit" class="text-blue-500 hover:text-blue-700 transition">
                                             <i class="fas fa-share-alt"></i> Share

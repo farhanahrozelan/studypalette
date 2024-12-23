@@ -1,6 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\NoteLogsController;
+use App\Http\Controllers\AnalyticsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,6 +41,8 @@ Route::resource('notes', NoteController::class)->middleware('auth');
 Route::get('/shared-notes', [NoteController::class, 'sharedNotes'])->name('notes.shared');
 Route::post('/notes/{note}/share', [NoteController::class, 'share'])->name('notes.share');
 Route::get('/shared-notes/{note}', [NoteController::class, 'showSharedNote'])->name('notes.shared.show');
+Route::post('/shared-notes', [NoteController::class, 'storeSharedNotes'])->name('notes.shared.store');
+
 
 //report notes
 use App\Http\Controllers\ReportController;
@@ -61,3 +67,43 @@ use App\Http\Controllers\TaskController;
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('/dashboard', [TaskController::class, 'getDashboardTasks'])->name('dashboard');
 Route::resource('tasks', TaskController::class)->only(['index', 'store', 'update', 'destroy']);
+
+// Admin Login route
+Route::get('/adminLogin', [AdminController::class, 'showLoginForm'])
+->name('adminLogin.form');
+
+Route::post('/adminLogin', [AdminController::class, 'login'])
+->name('adminLogin');
+
+// Admin Dashboard route
+Route::get('/adminDashboard', [AdminDashboardController::class, 'index'])
+->name('adminDashboard');
+
+// Note Logs route
+Route::get('/admin/approved-notes', [NoteLogsController::class, 'approvedNotes'])->name('approvedNotes');
+Route::get('/admin/disapproved-notes', [NoteLogsController::class, 'disapprovedNotes'])->name('disapprovedNotes');
+
+// Reported Notes route
+Route::get('/reportedNotes', [ReportController::class, 'index'])
+->name('reportedNotes');
+
+Route::post('/reported-notes/{noteId}/{action}', [ReportController::class, 'review'])
+->name('reportedNotes.review');
+
+// Analytics route
+Route::get('/analytics/approval-disapproval', [AnalyticsController::class, 'getApprovalDisapprovalData']);
+Route::get('/analytics/flagged-notes-over-time', [AnalyticsController::class, 'getFlaggedNotesOverTime']);
+Route::get('/analytics/reported-notes-over-time', [AnalyticsController::class, 'getReportedNotesOverTime']);
+Route::get('/analytics/trending-issues', [AnalyticsController::class, 'getTrendingIssues']);
+Route::get('/analytics/trending-issues-categories', [AnalyticsController::class, 'getTrendingIssuesCategories']);
+Route::get('/analytics/user-engagement', [AnalyticsController::class, 'getUserEngagement']);
+
+// UpdateNoteStatus route
+Route::put('/notes/{noteId}/status', [NoteController::class, 'updateNoteStatus'])
+->name('updateNoteStatus');
+
+//Logout route
+Route::post('/adminLogout', function () {
+    Auth::logout();
+    return redirect('/adminLogin'); 
+})->name('adminLogout');
