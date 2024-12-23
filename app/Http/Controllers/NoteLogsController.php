@@ -10,7 +10,7 @@ class NoteLogsController extends Controller
     public function approvedNotes()
     {
         // Fetch notes with 'approved' status
-        $approvedNotes = Note::where('status', 'approved')->with('creator')->get();
+        $approvedNotes = Note::where('status', 'approved')->with('user')->get();
         
         return view('approvedNotes', compact('approvedNotes'));
     }
@@ -18,7 +18,7 @@ class NoteLogsController extends Controller
     public function disapprovedNotes()
     {
         // Fetch notes with 'disapproved' status
-        $disapprovedNotes = Note::where('status', 'disapproved')->with('creator')->get();
+        $disapprovedNotes = Note::where('status', 'disapproved')->with('user')->get();
         
         return view('disapprovedNotes', compact('disapprovedNotes'));
     }

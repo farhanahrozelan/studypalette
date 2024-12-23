@@ -8,7 +8,7 @@
         <link rel="stylesheet" href="{{ asset('studyPalette.css') }}">
 
         <!-- Favicon --> 
-        <link rel="icon" type="image/png" href="{{ url('favicon.png') }}">
+        <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
 
         <!-- Fonts -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -76,7 +76,7 @@
                     @foreach ($disapprovedNotes as $disapproved)
                         <tr>
                             <td>{{ $disapproved->id }}</td>
-                            <td>{{ $disapproved->creator->id }}</td>
+                            <td>{{ $disapproved->user->id }}</td>
                             <td>{{ $disapproved->updated_at->format('Y-m-d') }}</td>
                             <td>
                                 <button class="view-btn" 
@@ -96,7 +96,7 @@
 
         <script>
             document.addEventListener('DOMContentLoaded', () => {
-                document.querySelectorAll('.view-btn').forEach(button => {
+                document.querySelectorAll('view-btn').forEach(button => {
                     button.addEventListener('click', function () {
                         const noteId = this.getAttribute('data-note-id');
                         const noteTitle = this.getAttribute('data-note-title');
