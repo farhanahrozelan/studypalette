@@ -24,10 +24,11 @@ class AnalyticsController extends Controller
         return response()->json($data);
     }
 
-    public function getUserEngagement(Request $request)
+    public function getNoteSharing(Request $request)
     {
         $query = DB::table('notes')
             ->selectRaw('DATE(created_at) as date, COUNT(*) as count')
+            ->where('is_shared', true)
             ->groupBy(DB::raw('DATE(created_at)'))
             ->orderBy('date', 'asc');
 
@@ -38,21 +39,6 @@ class AnalyticsController extends Controller
         $data = $query->get();    
         return response()->json($data);
     }
-    
-    /*public function getFlaggedNotesOverTime(Request $request)
-    {
-        $query = DB::table('flagged_notes')
-            ->selectRaw('DATE(created_at) as date, COUNT(*) as count')
-            ->groupBy(DB::raw('DATE(created_at)'))
-            ->orderBy('date', 'asc');
-            
-        if ($request->has('start_date') && $request->has('end_date')) {
-            $query->whereBetween(DB::raw('DATE(created_at)'), [$request->start_date, $request->end_date]);
-        }
-        
-        $data = $query->get();
-        return response()->json($data);
-    }*/
 
     public function getReportedNotesOverTime(Request $request)
     {
@@ -88,7 +74,7 @@ class AnalyticsController extends Controller
         
         $data = $query->groupBy('date', 'reason')
             ->orderBy('date', 'asc')
-            ->get();
+            ->get(); 
             
         return response()->json($data);
     }

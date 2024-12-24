@@ -9,7 +9,6 @@ header {
     background-color: #c2837a; 
     color: #7c3f3f; 
     padding: 10px; 
-    text-align: center; 
     font-size: 1.5rem; 
     font-weight: bold; 
     font-family: 'Satisfy', cursive; 
@@ -25,37 +24,37 @@ header {
 }
 
 header img.logo {
-    height: 2rem; 
+    height: 42px; 
     margin-right: 10px; 
     vertical-align: middle; 
 }
 
-/* Align content in the header */
 .header-content {
     display: flex;
     align-items: center;
+    flex-grow: 1; /* Ensures the content between logo and logout button is centered */
+    justify-content: center; /* Center the "Study Palette" text */
 }
 
-/* Logout form styling */
 .logout-form {
     margin: 0;
 }
 
 .logout-btn {
-    background-color: #a76a61;
+    background-color: #7c3f3f;
     color: #ffffff;
     border: none;
-    padding: 5px 12px;
+    padding: 10px 20px;
+    margin-right: 25px;
     border-radius: 5px;
     font-size: 1rem;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    font-family: 'Poppins', sans-serif;
     text-shadow: 0.5px 0.5px 0.5px rgba(0, 0, 0, 0.2);
 }
 
 .logout-btn:hover {
-    background-color: #7c3f3f;
+    background-color: #a04d4d;
 }
 
 .login-container { 
@@ -83,7 +82,7 @@ header img.logo {
 .login-card p { 
     text-align: center; 
     margin-bottom: 1rem;
-    font-size: 12px;
+    font-size: 14px;
 } 
 
 .login-card .logo { 
@@ -150,7 +149,7 @@ header img.logo {
 .overview-card {
     background-color: #e4b4a1;
     padding: 20px;
-    width: 230px;
+    width: 300px;
     border-radius: 12px;
     display: flex;
     flex-direction: column;
@@ -217,7 +216,7 @@ header img.logo {
     margin-bottom: 20px;
     transition: background 0.3s;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    font-family: 'Figtree', sans-serif;
+    font-family: 'Poppins', sans-serif;
 }
 
 .chart-controls button:hover {
@@ -259,9 +258,10 @@ table th {
     background-color: #e4b4a1;
     color: black;
     font-weight: bold;
+    font-family: 'Figtree', sans-serif;
 }
 
-.view-btn .review-btn {
+.view-btn, .review-btn {
     background-color: #a76a61;
     color: white;
     padding: 10px 20px;
@@ -280,36 +280,7 @@ table th {
     background-color: #7c3f3f;
 }
 
-.swal2-popup {
-    text-align: center; 
-    padding: 15px;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-/* Content Styling */
-.swal2-html-container {
-    font-size: 1rem;
-    color: #555; 
-    margin-bottom: 20px;
-    line-height: 1.6;
-}
-
 /* Button Container */
-/*.close-btn-style {
-    background-color: #a76a61 !important;
-    color: #fff !important;
-    border-radius: 5px;
-    padding: 10px 20px;
-    font-size: 14px;
-    font-family: 'Poppins', sans-serif;
-    transition: background-color 0.3s ease;
-}
-
-.close-btn-style:hover {
-    background-color: #7c3f3f !important;
-}*/
-
 .swal2-actions {
     display: flex;
     justify-content: center;

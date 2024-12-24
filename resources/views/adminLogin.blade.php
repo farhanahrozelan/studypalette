@@ -14,7 +14,12 @@
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
         <style> 
-        
+
+        .alert {
+            margin-bottom: 15px;
+            color: #dc3545;
+        }
+
         </style> 
     </head> 
     <body> 
@@ -31,11 +36,6 @@
                 <!-- Login Form --> 
                 <form action="{{ route('adminLogin') }}" method="POST"> 
                     @csrf 
-                    @if (session('error')) 
-                        <div class="alert"> 
-                            {{ session('error') }} 
-                        </div> 
-                    @endif 
 
                     <div class="form-group"> 
                         <label for="email">Email</label> 
@@ -45,7 +45,13 @@
                     <div class="form-group"> 
                         <label for="password">Password</label> 
                         <input type="password" id="password" name="password" placeholder="Enter your password" class="form-control" required> 
-                    </div> 
+                    </div>
+
+                    @if (session('error')) 
+                        <div class="alert"> 
+                            {{ session('error') }} 
+                        </div> 
+                    @endif
 
                     <button type="submit" class="btn-primary">Log In</button> 
                 </form> 

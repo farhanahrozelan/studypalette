@@ -22,6 +22,10 @@ class ReportController extends Controller
             'reason' => $request->reason,
         ]);
 
+        // Update the status of the note to 'reported' in the notes table
+        $note->status = 'reported';
+        $note->save();
+
         return redirect()->back()->with('success', 'The note has been reported.');
     }
 

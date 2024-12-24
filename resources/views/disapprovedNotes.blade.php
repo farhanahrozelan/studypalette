@@ -19,6 +19,9 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=Satisfy&display=swap" rel="stylesheet">
 
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.0/dist/tailwind.min.css" rel="stylesheet">
+
         <style>
             
             h1 {
@@ -29,7 +32,7 @@
                 font-family: 'Poppins', sans-serif;
             }
 
-            .close-confirm-btn {
+            .close-btn-style {
                 width: 150px;
                 padding: 10px 0;
                 font-family: Poppins, sans-serif;
@@ -46,17 +49,13 @@
                 <img src="{{ asset('images/logo.png') }}" class="logo" alt="Logo">
                 <span>Study Palette</span>
             </div>
-            <form method="POST" action="{{ route('logout') }}" class="logout-form">
-                @csrf
-                <button type="submit" class="logout-btn">Logout</button>
-            </form>
         </header>
 
         <div class="main-content" id="main-content">
             
             <div style="text-align: left; margin: 40px 20px 10px;">
                 <a href="{{ route('adminDashboard') }}" class="back-btn">
-                    <i class="fas fa-arrow-left" style="margin-right: 8px;"></i> Back to Dashboard
+                    <i class="fa-solid fa-arrow-left-long"></i>
                 </a>
             </div>
 
@@ -80,7 +79,7 @@
                             <td>{{ $disapproved->updated_at->format('Y-m-d') }}</td>
                             <td>
                                 <button class="view-btn" 
-                                data-note-id="{{ $disapproved->noteID }}" 
+                                data-note-id="{{ $disapproved->id }}" 
                                 data-note-title="{{ $disapproved->title }}"
                                 data-note-keypoints="{{ $disapproved->key_points }}"  
                                 data-note-content="{{ $disapproved->notes }}"
@@ -95,52 +94,71 @@
         </div>
 
         <script>
-            document.addEventListener('DOMContentLoaded', () => {
-                document.querySelectorAll('view-btn').forEach(button => {
+             document.addEventListener('DOMContentLoaded', () => {
+                document.querySelectorAll('.view-btn').forEach(button => {
                     button.addEventListener('click', function () {
                         const noteId = this.getAttribute('data-note-id');
-                        const noteTitle = this.getAttribute('data-note-title');
-                        const noteKeyPoints = this.getAttribute('data-note-keypoints');
-                        const noteContent = this.getAttribute('data-note-content');
-                        const noteSummary = this.getAttribute('data-note-summary');
 
-                        Swal.fire({
-                            title: '<h3 style="font-size: 1.8rem; font-weight: 600; color: #333; margin-bottom: 10px; font-family: Poppins, sans-serif;">Note ID: ${noteId}</h3>',
-                            html: `
-                                <div style="font-family: 'Poppins', sans-serif; text-align: left; max-width: 700px; margin: 0 auto;">
-                                    <!-- Note Title -->
-                                    <h1 style="font-size: 1.8rem; font-weight: 600; color: #333; margin-bottom: 10px;">${noteTitle}</h1>
-            
-                                    <!-- Key Points -->
-                                    <div style="margin-bottom: 20px; padding: 15px; background-color: #f7fafc; border: 1px solid #e2e8f0; border-radius: 8px;">
-                                        <h2 style="font-size: 1.2rem; font-weight: 500; color: #2d3748; margin-bottom: 8px;">Key Points:</h2>
-                                        <p style="font-size: 1rem; color: #4a5568;">${noteKeyPoints || 'No key points provided.'}</p>
-                                    </div>
-            
-                                    <!-- Notes -->
-                                    <div style="margin-bottom: 20px; padding: 15px; background-color: #f7fafc; border: 1px solid #e2e8f0; border-radius: 8px;">
-                                        <h2 style="font-size: 1.2rem; font-weight: 500; color: #2d3748; margin-bottom: 8px;">Notes:</h2>
-                                        <p style="font-size: 1rem; color: #4a5568;">${noteContent || 'No additional notes provided.'}</p>
-                                    </div>
-            
-                                    <!-- Summary -->
-                                    <div style="margin-bottom: 20px; padding: 15px; background-color: #f7fafc; border: 1px solid #e2e8f0; border-radius: 8px;">
-                                        <h2 style="font-size: 1.2rem; font-weight: 500; color: #2d3748; margin-bottom: 8px;">Summary:</h2>
-                                        <p style="font-size: 1rem; color: #4a5568;">${noteSummary || 'No summary provided.'}</p>
-                                    </div>
-                                </div>
-                            `,
-                            confirmButtonText: 'Close',
-                            confirmButtonColor: '#c2837a',
-                            customClass: {
-                                /*popup: 'swal2-popup',
-                                htmlContainer: 'swal2-html-container', */
-                                confirmButton: 'close-btn-style',
+                        // Fetch note details dynamically
+                        fetch(`/notes/${noteId}/view`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                const note = data.note;
+
+                                Swal.fire({
+                                    title: `<h3 class="text-2xl font-bold mb-4 text-left">${note.title}</h3>`,
+                                    html: `
+                                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6 mb-4">
+                                            <!-- Key Points -->
+                                            <div class="p-4 bg-gray-100 shadow-md border border-gray-300 rounded-md text-left">
+                                                <h2 class="text-lg font-semibold text-gray-700 mb-2">Key Points:</h2>
+                                                <p class="text-gray-600">${note.key_points || 'No key points provided.'}</p>
+                                            </div>
+                                            <!-- Notes -->
+                                            <div class="col-span-2 p-4 bg-gray-100 shadow-md border border-gray-300 rounded-md text-left">
+                                                <h2 class="text-lg font-semibold text-gray-700 mb-2">Notes:</h2>
+                                                <p class="text-gray-600">${note.notes || 'No additional notes provided.'}</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Summary -->
+                                        <div class="p-4 bg-gray-100 shadow-md border border-gray-300 rounded-md text-left">
+                                            <h2 class="text-lg font-semibold text-gray-700 mb-2">Summary:</h2>
+                                            <p class="text-gray-600">${note.summary || 'No summary provided.'}</p>
+                                        </div>
+        
+                                    `,
+                                    confirmButtonText: 'Close',
+                                    confirmButtonColor: '#c2837a',
+                                    customClass: {
+                                        confirmButton: 'close-btn-style',
+                                    },
+                                    width: '70%', // Adjust modal size
+                                    padding: '2rem', // Adjust padding inside the modal
+                                });
+
+                            } else {
+                                Swal.fire({
+                                    title: 'Error',
+                                    text: data.message || 'Note not found.',
+                                    icon: 'error',
+                                });
                             }
+                        })
+                        .catch(error => {
+                            console.error('Error fetching note details:', error);
+                            Swal.fire({
+                                title: 'Error',
+                                text: 'Failed to fetch note details.',
+                                icon: 'error',
+                            });
                         });
+
                     });
                 });
             });
+
         </script>
 
     </body>

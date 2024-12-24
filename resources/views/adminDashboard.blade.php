@@ -71,7 +71,7 @@
             </div>
             <form method="POST" action="{{ route('adminLogout') }}" class="logout-form">
                 @csrf
-                <button type="submit" class="logout-btn">Logout</button>
+                <button type="submit" class="logout-btn"><i class="fa-solid fa-right-from-bracket"></i></button>
             </form>
         </header>
 
@@ -117,13 +117,13 @@
                 </div>
 
                 <div class="chart-container">
-                    <h3>User Engagement Over Time</h3>
+                    <h3>Note Sharing Trends Over Time</h3>
                     <div class="chart-wrapper">
-                        <canvas id="userEngagementChart"></canvas>
+                        <canvas id="noteSharingChart"></canvas>
                     </div>
                     <div class="chart-controls">
-                        <button class="filter-btn" data-chart="userEngagementChart"><i class="fa-solid fa-filter"></i> Filter</button>
-                        <button class="reset-btn" data-chart="userEngagementChart"><i class="fa-solid fa-arrow-rotate-left"></i> Reset</button>
+                        <button class="filter-btn" data-chart="noteSharingChart"><i class="fa-solid fa-filter"></i> Filter</button>
+                        <button class="reset-btn" data-chart="noteSharingChart"><i class="fa-solid fa-arrow-rotate-left"></i> Reset</button>
                     </div>
                 </div>
 
@@ -348,8 +348,18 @@
             fetch(url)
             .then(response => response.json())
             .then(data => {
-                chart.data.labels = data.map(item => item.flag_reason);
-                chart.data.datasets[0].data = data.map(item => item.count);
+                // Aggregate data to avoid duplicate categories
+                const aggregatedData = data.reduce((acc, item) => {
+                    if (!acc[item.reason]) {
+                        acc[item.reason] = 0;
+                    }
+                    acc[item.reason] += item.count;
+                    return acc;
+                }, {});
+                
+                // Update chart data
+                chart.data.labels = Object.keys(aggregatedData);
+                chart.data.datasets[0].data = Object.values(aggregatedData);
                 chart.update();
             })
             .catch(error => console.error('Error updating chart:', error));
@@ -390,14 +400,14 @@
         updateApprovalDisapprovalChart(approvalDisapprovalChart, '/analytics/approval-disapproval');
 
 
-        // Initialize and configure User Engagement Over Time chart
-        const userEngagementChart = initializeChart('userEngagementChart', {
+        // Initialize and configure Note Sharing Trends Over Time Chart
+        const userEngagementChart = initializeChart('noteSharingChart', {
             type: 'line',
             data: {
                 labels: [],
                 datasets: [
                     {
-                        label: 'Notes Submissions',
+                        label: 'Shared Notes',
                         data: [],
                         borderColor: '#c2837a', 
                         backgroundColor: 'rgba(188, 130, 102, 0.3)', 
@@ -420,15 +430,15 @@
                         beginAtZero: true,
                         title: {
                             display: true,
-                            text: 'Number of Submissions', // Y-axis label
+                            text: 'Number of Shared Notes', // Y-axis label
                             font: { size: 14, weight: 'bold' },
                         },
                     },
                 },
             },
         });
-        addChartControls(userEngagementChart, '/analytics/user-engagement');
-        updateChart(userEngagementChart, '/analytics/user-engagement');
+        addChartControls(userEngagementChart, '/analytics/note-sharing');
+        updateChart(userEngagementChart, '/analytics/note-sharing');
 
 
         // Initialize and configure Reported Notes Over Time chart

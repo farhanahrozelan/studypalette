@@ -71,7 +71,6 @@ Route::resource('tasks', TaskController::class)->only(['index', 'store', 'update
 // Admin Login route
 Route::get('/adminLogin', [AdminController::class, 'showLoginForm'])
 ->name('adminLogin.form');
-
 Route::post('/adminLogin', [AdminController::class, 'login'])
 ->name('adminLogin');
 
@@ -82,21 +81,20 @@ Route::get('/adminDashboard', [AdminDashboardController::class, 'index'])
 // Note Logs route
 Route::get('/admin/approved-notes', [NoteLogsController::class, 'approvedNotes'])->name('approvedNotes');
 Route::get('/admin/disapproved-notes', [NoteLogsController::class, 'disapprovedNotes'])->name('disapprovedNotes');
+Route::get('/notes/{noteId}/view', [NoteLogsController::class, 'view'])->name('notes.view');
 
 // Reported Notes route
 Route::get('/reportedNotes', [ReportController::class, 'index'])
 ->name('reportedNotes');
-
 Route::post('/reported-notes/{noteId}/{action}', [ReportController::class, 'review'])
 ->name('reportedNotes.review');
 
 // Analytics route
 Route::get('/analytics/approval-disapproval', [AnalyticsController::class, 'getApprovalDisapprovalData']);
-Route::get('/analytics/flagged-notes-over-time', [AnalyticsController::class, 'getFlaggedNotesOverTime']);
+Route::get('/analytics/note-sharing', [AnalyticsController::class, 'getNoteSharing']);
 Route::get('/analytics/reported-notes-over-time', [AnalyticsController::class, 'getReportedNotesOverTime']);
 Route::get('/analytics/trending-issues', [AnalyticsController::class, 'getTrendingIssues']);
 Route::get('/analytics/trending-issues-categories', [AnalyticsController::class, 'getTrendingIssuesCategories']);
-Route::get('/analytics/user-engagement', [AnalyticsController::class, 'getUserEngagement']);
 
 // UpdateNoteStatus route
 Route::put('/notes/{noteId}/status', [NoteController::class, 'updateNoteStatus'])

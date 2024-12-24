@@ -20,6 +20,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=Satisfy&display=swap" rel="stylesheet">
 
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.0/dist/tailwind.min.css" rel="stylesheet">
 
         <style>
             
@@ -40,17 +41,13 @@
                 <img src="{{ asset('images/logo.png') }}" class="logo" alt="Logo">
                 <span>Study Palette</span>
             </div>
-            <form method="POST" action="{{ route('logout') }}" class="logout-form">
-                @csrf
-                <button type="submit" class="logout-btn">Logout</button>
-            </form>
         </header>
 
         <div class="main-content" id="main-content">
             
             <div style="text-align: left; margin: 40px 20px 10px;">
                 <a href="{{ route('adminDashboard') }}" class="back-btn">
-                    <i class="fas fa-arrow-left" style="margin-right: 8px;"></i> Back to Dashboard
+                    <i class="fa-solid fa-arrow-left-long"></i>
                 </a>
             </div>
 
@@ -67,6 +64,15 @@
                     </tr>
                 </thead>
 
+                @if ($reportedNotes->isEmpty())
+                <tbody>
+                    <tr>
+                        <td colspan="5" style="text-align: center; padding: 20px; font-size: 18px; color: #888;">
+                            No reported notes available for review at the moment.
+                        </td>
+                    </tr>
+                </tbody>
+                @else
                 <tbody>
                     @foreach ($reportedNotes as $report)
                     <tr id="note-row-{{ $report->note->id }}">
@@ -86,12 +92,106 @@
                     </tr>
                     @endforeach
                 </tbody>
+                @endif
             </table>
         </div>
 
         <script>
+
+document.addEventListener('DOMContentLoaded', () => {
+    let currentNoteId = null;
+
+    document.querySelectorAll('.review-btn').forEach(button => {
+        button.addEventListener('click', function () {
+            const noteId = this.getAttribute('data-note-id');
+            const noteTitle = this.getAttribute('data-note-title');
+            const noteKeyPoints = this.getAttribute('data-note-keypoints');
+            const noteContent = this.getAttribute('data-note-content');
+            const noteSummary = this.getAttribute('data-note-summary');
+
+            currentNoteId = noteId;
+
+            Swal.fire({
+                title: `<h3 class="text-2xl font-bold mb-4 text-left">${noteTitle || 'No Title Provided'}</h3>`,
+                html: `
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6 mb-4">
+                        <!-- Key Points -->
+                        <div class="p-4 bg-gray-100 shadow-md border border-gray-300 rounded-md text-left">
+                            <h2 class="text-lg font-semibold text-gray-700 mb-2">Key Points:</h2>
+                            <p class="text-gray-600">${noteKeyPoints || 'No key points provided.'}</p>
+                        </div>
+                        <!-- Notes -->
+                        <div class="col-span-2 p-4 bg-gray-100 shadow-md border border-gray-300 rounded-md text-left">
+                            <h2 class="text-lg font-semibold text-gray-700 mb-2">Notes:</h2>
+                            <p class="text-gray-600">${noteContent || 'No additional notes provided.'}</p>
+                        </div>
+                    </div>
+                                    
+                    <!-- Summary -->
+                    <div class="p-4 bg-gray-100 shadow-md border border-gray-300 rounded-md text-left">
+                        <h2 class="text-lg font-semibold text-gray-700 mb-2">Summary:</h2>
+                        <p class="text-gray-600">${noteSummary || 'No summary provided.'}</p>
+                    </div>
+                `,
+                showCancelButton: true,
+                confirmButtonText: 'Approve',
+                cancelButtonText: 'Disapprove',
+                customClass: {
+                    actions: 'swal2-actions',
+                    confirmButton: 'approve-btn-style',
+                    cancelButton: 'disapprove-btn-style',
+                },
+                width: '70%', // Adjust modal size
+                padding: '2rem', // Adjust padding inside the modal
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    updateNoteStatus(currentNoteId, 'approve');
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    updateNoteStatus(currentNoteId, 'disapprove');
+                }
+            });
+        });
+    });
+
+    function updateNoteStatus(noteId, action) {
+        fetch(`/reported-notes/${noteId}/${action}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById(`note-row-${noteId}`).remove();
+                Swal.fire({
+                    icon: 'success',
+                    title: action === 'approve' ? 'Approved!' : 'Disapproved!',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: data.message,
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Something went wrong. Please try again.',
+            });
+        });
+    }
+});
+
         
-        document.addEventListener('DOMContentLoaded', () => {
+        /*document.addEventListener('DOMContentLoaded', () => {
             let currentNoteId = null;
 
             document.querySelectorAll('.review-btn').forEach(button => {
@@ -105,41 +205,37 @@
                     currentNoteId = noteId;
 
                     Swal.fire({
-                        title: '<h3 style="font-size: 1.8rem; font-weight: 600; color: #333; margin-bottom: 10px; font-family: Poppins, sans-serif;">Note ID: ${noteId}</h3>',
+                        title: `<h3 class="text-2xl font-bold mb-4 text-left">${note.title}</h3>`,
                         html: `
-                            <div style="font-family: 'Poppins', sans-serif; text-align: left; max-width: 700px; margin: 0 auto;">
-                                <!-- Note Title -->
-                                <h1 style="font-size: 1.8rem; font-weight: 600; color: #333; margin-bottom: 10px;">${noteTitle}</h1>
-            
+                            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6 mb-4">
                                 <!-- Key Points -->
-                                <div style="margin-bottom: 20px; padding: 15px; background-color: #f7fafc; border: 1px solid #e2e8f0; border-radius: 8px;">
-                                    <h2 style="font-size: 1.2rem; font-weight: 500; color: #2d3748; margin-bottom: 8px;">Key Points:</h2>
-                                    <p style="font-size: 1rem; color: #4a5568;">${noteKeyPoints || 'No key points provided.'}</p>
+                                <div class="p-4 bg-gray-100 shadow-md border border-gray-300 rounded-md text-left">
+                                    <h2 class="text-lg font-semibold text-gray-700 mb-2">Key Points:</h2>
+                                    <p class="text-gray-600">${note.key_points || 'No key points provided.'}</p>
                                 </div>
-            
                                 <!-- Notes -->
-                                <div style="margin-bottom: 20px; padding: 15px; background-color: #f7fafc; border: 1px solid #e2e8f0; border-radius: 8px;">
-                                    <h2 style="font-size: 1.2rem; font-weight: 500; color: #2d3748; margin-bottom: 8px;">Notes:</h2>
-                                    <p style="font-size: 1rem; color: #4a5568;">${noteContent || 'No additional notes provided.'}</p>
+                                <div class="col-span-2 p-4 bg-gray-100 shadow-md border border-gray-300 rounded-md text-left">
+                                    <h2 class="text-lg font-semibold text-gray-700 mb-2">Notes:</h2>
+                                    <p class="text-gray-600">${note.notes || 'No additional notes provided.'}</p>
                                 </div>
-            
-                                <!-- Summary -->
-                                <div style="margin-bottom: 20px; padding: 15px; background-color: #f7fafc; border: 1px solid #e2e8f0; border-radius: 8px;">
-                                    <h2 style="font-size: 1.2rem; font-weight: 500; color: #2d3748; margin-bottom: 8px;">Summary:</h2>
-                                    <p style="font-size: 1rem; color: #4a5568;">${noteSummary || 'No summary provided.'}</p>
-                                </div>
+                            </div>
+                                        
+                            <!-- Summary -->
+                            <div class="p-4 bg-gray-100 shadow-md border border-gray-300 rounded-md text-left">
+                                <h2 class="text-lg font-semibold text-gray-700 mb-2">Summary:</h2>
+                                <p class="text-gray-600">${note.summary || 'No summary provided.'}</p>
                             </div>
                         `,
                         showCancelButton: true,
                         confirmButtonText: 'Approve',
                         cancelButtonText: 'Disapprove',
                         customClass: {
-                            /*popup: 'swal2-popup',
-                            htmlContainer: 'swal2-html-container', */
                             actions: 'swal2-actions',
                             confirmButton: 'approve-btn-style',
                             cancelButton: 'disapprove-btn-style',
-                        }
+                        },
+                        width: '70%', // Adjust modal size
+                        padding: '2rem', // Adjust padding inside the modal
                     }).then((result) => {
                         if (result.isConfirmed) {
                             updateNoteStatus(currentNoteId, 'approve');
@@ -185,7 +281,7 @@
                     });
                 });
             }
-        });
+        }); */
 
 
         </script>
