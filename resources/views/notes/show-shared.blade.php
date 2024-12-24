@@ -14,15 +14,11 @@
 
                 <!-- Report and Back Buttons -->
                 <div class="flex items-center space-x-2">
-                     <!-- Report Button -->
-    <form action="{{ route('notes.report', $note->id) }}" method="POST" class="inline">
-        @csrf
-        <input type="hidden" name="reason" value="Inappropriate content">
-        <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded shadow-md transition duration-200"
-                onclick="return confirm('Are you sure you want to report this note?');">
-            <i class="fas fa-flag"></i> Report
-        </button>
-    </form>
+                    <!-- Report Button -->
+                    <button type="button" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded shadow-md transition duration-200"
+                            onclick="showReportModal();">
+                        <i class="fas fa-exclamation-circle"></i> Report
+                    </button>
 
                     <!-- Back Button -->
                     <a href="{{ route('notes.shared') }}" 
@@ -54,5 +50,44 @@
         </div>
     </div>
 </div>
+
+<!-- Modal -->
+<div id="reportModal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
+    <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
+        <h2 class="text-xl font-semibold mb-4">Report Note</h2>
+        <form action="{{ route('notes.report', $note->id) }}" method="POST" onsubmit="return confirmReportReason();">
+            @csrf
+            <textarea id="reason-textarea" name="reason" placeholder="Enter your reason for reporting..." 
+                      class="border border-gray-300 rounded px-3 py-2 w-full"></textarea>
+            <div class="mt-4 flex justify-end space-x-2">
+                <button type="button" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded shadow-md" onclick="closeReportModal();">
+                    Cancel
+                </button>
+                <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded shadow-md">
+                    Submit
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function showReportModal() {
+        document.getElementById('reportModal').classList.remove('hidden');
+    }
+
+    function closeReportModal() {
+        document.getElementById('reportModal').classList.add('hidden');
+    }
+
+    function confirmReportReason() {
+        const reason = document.getElementById('reason-textarea').value.trim();
+        if (!reason) {
+            alert('Please provide a reason for reporting this note.');
+            return false; // Prevent form submission
+        }
+        return confirm('Are you sure you want to report this note for the following reason?\n\n' + reason);
+    }
+</script>
 @endsection
 </x-app-layout>

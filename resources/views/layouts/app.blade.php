@@ -10,7 +10,7 @@
      <!-- PWA -->
      <link rel="manifest" href="{{ asset('manifest.json') }}">      
 
-     <!-- Toastr CSS -->
+     <!-- Toastr CSS --> 
      <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
 
      <!-- jQuery (required for Toastr) -->
