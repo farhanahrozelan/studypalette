@@ -55,31 +55,53 @@ class AnalyticsController extends Controller
         return response()->json($data);
     }
 
-    public function getTrendingIssues(Request $request)
+    public function getReportedIssues(Request $request)
     {
         $query = DB::table('reports')
-            ->selectRaw('DATE(created_at) as date, reason, COUNT(*) as count')
+            ->selectRaw('reason, COUNT(*) as count')
             ->whereNotNull('reason');
-        
+
         // Apply date range filter
         if ($request->has('start_date') && $request->has('end_date')) {
             $query->whereBetween(DB::raw('DATE(created_at)'), [$request->start_date, $request->end_date]);
         }
-        
+
         // Apply category filter
         if ($request->has('categories')) {
             $categories = explode(',', $request->categories);
             $query->whereIn('reason', $categories);
         }
+
+        $data = $query
+            ->groupBy('reason')
+            ->get()
+            ->toArray();
+
+        // Group less frequent reasons into "Other"
+        $total = array_sum(array_column($data, 'count'));
+        $threshold = 0.05 * $total; // Group reasons with <5% frequency
+        $groupedData = [];
+        $otherCount = 0;
+
+        foreach ($data as $entry) {
+            if ($entry->count < $threshold) {
+                $otherCount += $entry->count;
+            } else {
+                $groupedData[] = $entry;
+            }
+        }
         
-        $data = $query->groupBy('date', 'reason')
-            ->orderBy('date', 'asc')
-            ->get(); 
-            
-        return response()->json($data);
+        if ($otherCount > 0) {
+            $groupedData[] = (object)[
+                'reason' => 'Other',
+                'count' => $otherCount,
+            ];
+        }
+
+        return response()->json($groupedData);
     }
     
-    public function getTrendingIssuesCategories()
+    public function getReportedIssuesCategories()
     {
         $categories = DB::table('reports')
             ->distinct()

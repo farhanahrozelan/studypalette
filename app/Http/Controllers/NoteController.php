@@ -15,8 +15,10 @@ class NoteController extends Controller
 
     public function index()
     {
-        // Fetch notes that belong to the authenticated user
-        $notes = Note::where('user_id', auth()->id())->get();
+        // Fetch notes that belong to the authenticated user and are not disapproved
+        $notes = Note::where('user_id', auth()->id())
+                 ->where('status', '!=', 'disapproved') // Exclude disapproved notes
+                 ->get();
 
         // Pass notes to the view
         return view('notes.index', compact('notes'));
@@ -146,29 +148,6 @@ public function storeSharedNotes(Request $request)
     // Redirect or return a response
     return redirect()->route('notes.shared')->with('success', 'Note shared successfully!');
 }
-
-public function handleNoteUpload(Request $request) 
-{ 
-    $noteTitle = $request->input('title'); //Get the note title 
-    $noteContent = $request->input('notes'); //Get the note content 
-    $noteKeyPoints = $request->input('key_points'); //Get the note key points 
-    $noteSummary = $request->input('summary'); //Get the note summary 
-    $createdBy = $request->input('user_id'); //Get who created the note 
-
-    //Save the note with an 'approved' status directly 
-    $note = new Note(); 
-    $note->title = $noteTitle; 
-    $note->notes = $noteContent; 
-    $note->key_points = $noteKeyPoints; 
-    $note->summary = $noteSummary; 
-    $note->user_id = $createdBy; 
-    $note->status = 'approved'; // Automatically approve the note 
-    $note->save(); 
-
-    // Return a success response 
-    return response()->json(['message' => 'Note approved successfully']); 
-
-} 
 
 public function updateNoteStatus(Request $request, $noteId) 
 { 

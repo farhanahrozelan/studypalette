@@ -48,8 +48,14 @@ class ReportController extends Controller
             Note::where('id', $noteId)->update(['status' => 'approved']); 
         } elseif ($action === 'disapprove') { 
             $reportedNote->status = 'disapproved'; 
-            $reportedNote->save(); 
-            Note::where('id', $noteId)->update(['status' => 'disapproved']); 
+            $reportedNote->save();
+
+            // Update note status and set is_shared to false
+            Note::where('id', $noteId)->update([
+                'status' => 'disapproved',
+                'is_shared' => false
+            ]);
+
         } 
          
         return response()->json(['success' => true, 'message' => "Note {$action}d successfully."]); 

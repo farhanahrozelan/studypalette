@@ -140,13 +140,13 @@
 
 
                 <div class="chart-container">
-                    <h3>Trending Issues</h3>
+                    <h3>Proportions of Reported Issues</h3>
                     <div class="chart-wrapper">
-                        <canvas id="trendingIssuesChart"></canvas>
+                        <canvas id="reportedIssuesChart"></canvas>
                     </div>
                     <div class="chart-controls">
-                        <button class="filter-btn" data-chart="trendingIssuesChart"><i class="fa-solid fa-filter"></i> Filter</button>
-                        <button class="reset-btn" data-chart="trendingIssuesChart"><i class="fa-solid fa-arrow-rotate-left"></i> Reset</button>
+                        <button class="filter-btn" data-chart="reportedIssuesChart"><i class="fa-solid fa-filter"></i> Filter</button>
+                        <button class="reset-btn" data-chart="reportedIssuesChart"><i class="fa-solid fa-arrow-rotate-left"></i> Reset</button>
                     </div>
                 </div>
                 
@@ -212,8 +212,8 @@
         }
 
 
-        // Function to add combined category and date filtering for Trending Issues chart
-        function addTrendingIssuesChartControls(chart, fetchUrl) {
+        // Function to add combined category and date filtering for Reported Issues chart
+        function addReportedIssuesChartControls(chart, fetchUrl) {
             document.querySelector(`.filter-btn[data-chart="${chart.canvas.id}"]`).addEventListener('click', () => {
                 Swal.fire({
                     title: '<h3 style="font-family: Poppins, sans-serif; font-size: 24px; font-weight: 600; color: #333; margin-bottom: 20px;">Filter Options</h3>',
@@ -233,7 +233,7 @@
                     `,
                     didOpen: () => {
                         // Fetch categories for the checkboxes dynamically
-                        fetch('/analytics/trending-issues-categories')
+                        fetch('/analytics/reported-issues-categories')
                         .then(response => response.json())
                         .then(categories => {
                             const categoriesList = document.getElementById('categoriesList');
@@ -263,13 +263,13 @@
                     },
                 }).then(result => {
                     if (result.isConfirmed) {
-                        updateTrendingIssuesChart(chart, fetchUrl, result.value.startDate, result.value.endDate, result.value.selectedCategories);
+                        updateReportedIssuesChart(chart, fetchUrl, result.value.startDate, result.value.endDate, result.value.selectedCategories);
                     }
                 });
             });
             
             document.querySelector(`.reset-btn[data-chart="${chart.canvas.id}"]`).addEventListener('click', () => {
-                updateTrendingIssuesChart(chart, fetchUrl); // Reset to default (all filters cleared)
+                updateReportedIssuesChart(chart, fetchUrl); // Reset to default (all filters cleared)
             });
         }
 
@@ -332,8 +332,8 @@
         }
 
 
-        // Function to fetch and update the Trending Issues chart
-        function updateTrendingIssuesChart(chart, fetchUrl, startDate = null, endDate = null, selectedCategories = []) {
+        // Function to fetch and update the Reported Issues chart
+        function updateReportedIssuesChart(chart, fetchUrl, startDate = null, endDate = null, selectedCategories = []) {
             const url = new URL(fetchUrl, window.location.origin);
             
             // Append query parameters for date and category filters
@@ -401,7 +401,7 @@
 
 
         // Initialize and configure Note Sharing Trends Over Time Chart
-        const userEngagementChart = initializeChart('noteSharingChart', {
+        const noteSharingChart = initializeChart('noteSharingChart', {
             type: 'line',
             data: {
                 labels: [],
@@ -437,8 +437,8 @@
                 },
             },
         });
-        addChartControls(userEngagementChart, '/analytics/note-sharing');
-        updateChart(userEngagementChart, '/analytics/note-sharing');
+        addChartControls(noteSharingChart, '/analytics/note-sharing');
+        updateChart(noteSharingChart, '/analytics/note-sharing');
 
 
         // Initialize and configure Reported Notes Over Time chart
@@ -482,14 +482,14 @@
         updateChart(reportedNotesChart, '/analytics/reported-notes-over-time');
 
 
-        // Initialize and configure Trending Issues chart
-        const trendingIssuesChart = initializeChart('trendingIssuesChart', {
+        // Initialize and configure Reported Issues chart
+        const reportedIssuesChart = initializeChart('reportedIssuesChart', {
             type: 'pie',
             data: {
                 labels: [],
                 datasets: [
                     {
-                        label: 'Trending Issues',
+                        label: 'Reported Issues',
                         data: [],
                         backgroundColor: ['#7c3f3f', '#a76a61', '#c2837a', '#e4b4a1'],
                     },
@@ -502,11 +502,23 @@
                         display: true,
                         position: 'top',
                     },
+                    tooltip: {
+                        callbacks: {
+                            label: function (tooltipItem) {
+                                const dataIndex = tooltipItem.dataIndex;
+                                const label = tooltipItem.chart.data.labels[dataIndex];
+                                const value = tooltipItem.raw;
+                                const total = tooltipItem.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                const percentage = ((value / total) * 100).toFixed(1);
+                                return `${label}: ${percentage}% (${value})`;
+                            },
+                        },
+                    },
                 },
             },
         });
-        addTrendingIssuesChartControls(trendingIssuesChart, '/analytics/trending-issues');
-        updateTrendingIssuesChart(trendingIssuesChart, '/analytics/trending-issues');
+        addReportedIssuesChartControls(reportedIssuesChart, '/analytics/reported-issues');
+        updateReportedIssuesChart(reportedIssuesChart, '/analytics/reported-issues');
 
 
         </script>

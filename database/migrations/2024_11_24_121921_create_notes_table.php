@@ -19,7 +19,7 @@ return new class extends Migration
             $table->text('summary')->nullable();
             $table->unsignedBigInteger('user_id'); // Add user_id column
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade'); // Foreign key relationship
-            $table->enum('status', ['pending', 'approved', 'disapproved', 'reported'])->default('pending');
+            $table->enum('status', ['approved', 'disapproved', 'reported'])->default('approved');
             $table->timestamps();
         });
     }

@@ -25,7 +25,7 @@ class NoteSeeder extends Seeder
                 'notes' => 'This is a sample note added for testing purposes.',
                 'summary' => 'A short summary of the note.',
                 'user_id' => $user->id, // Associate the note with the user
-                'status' => 'pending', // Default status
+                'status' => 'approved', // Default status
             ]);
         }
     }

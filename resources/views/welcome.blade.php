@@ -6,9 +6,10 @@
             <img src="{{ asset('images/favicon.png') }}" alt="Logo" class="logo">
 
             <!-- Welcome Message -->
-            <h1 class="text-xl font-semibold text-gray-900 mb-4">Welcome to Study Palette</h1>
+            <h1 class="text-xl font-semibold text-gray-900 mb-4">Welcome to Study Palette !</h1>
             <p class="text-sm text-gray-600 mb-6">
-                Your journey to seamless learning begins here. Log in or register to access your account.
+                Your journey to seamless learning begins.  <br>
+                Log in or register to access your account.
             </p>
 
             <!-- Navigation Buttons -->

@@ -97,103 +97,10 @@
         </div>
 
         <script>
-
-document.addEventListener('DOMContentLoaded', () => {
-    let currentNoteId = null;
-
-    document.querySelectorAll('.review-btn').forEach(button => {
-        button.addEventListener('click', function () {
-            const noteId = this.getAttribute('data-note-id');
-            const noteTitle = this.getAttribute('data-note-title');
-            const noteKeyPoints = this.getAttribute('data-note-keypoints');
-            const noteContent = this.getAttribute('data-note-content');
-            const noteSummary = this.getAttribute('data-note-summary');
-
-            currentNoteId = noteId;
-
-            Swal.fire({
-                title: `<h3 class="text-2xl font-bold mb-4 text-left">${noteTitle || 'No Title Provided'}</h3>`,
-                html: `
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6 mb-4">
-                        <!-- Key Points -->
-                        <div class="p-4 bg-gray-100 shadow-md border border-gray-300 rounded-md text-left">
-                            <h2 class="text-lg font-semibold text-gray-700 mb-2">Key Points:</h2>
-                            <p class="text-gray-600">${noteKeyPoints || 'No key points provided.'}</p>
-                        </div>
-                        <!-- Notes -->
-                        <div class="col-span-2 p-4 bg-gray-100 shadow-md border border-gray-300 rounded-md text-left">
-                            <h2 class="text-lg font-semibold text-gray-700 mb-2">Notes:</h2>
-                            <p class="text-gray-600">${noteContent || 'No additional notes provided.'}</p>
-                        </div>
-                    </div>
-                                    
-                    <!-- Summary -->
-                    <div class="p-4 bg-gray-100 shadow-md border border-gray-300 rounded-md text-left">
-                        <h2 class="text-lg font-semibold text-gray-700 mb-2">Summary:</h2>
-                        <p class="text-gray-600">${noteSummary || 'No summary provided.'}</p>
-                    </div>
-                `,
-                showCancelButton: true,
-                confirmButtonText: 'Approve',
-                cancelButtonText: 'Disapprove',
-                customClass: {
-                    actions: 'swal2-actions',
-                    confirmButton: 'approve-btn-style',
-                    cancelButton: 'disapprove-btn-style',
-                },
-                width: '70%', // Adjust modal size
-                padding: '2rem', // Adjust padding inside the modal
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    updateNoteStatus(currentNoteId, 'approve');
-                } else if (result.dismiss === Swal.DismissReason.cancel) {
-                    updateNoteStatus(currentNoteId, 'disapprove');
-                }
-            });
-        });
-    });
-
-    function updateNoteStatus(noteId, action) {
-        fetch(`/reported-notes/${noteId}/${action}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                document.getElementById(`note-row-${noteId}`).remove();
-                Swal.fire({
-                    icon: 'success',
-                    title: action === 'approve' ? 'Approved!' : 'Disapproved!',
-                    timer: 2000,
-                    showConfirmButton: false
-                });
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: data.message,
-                });
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Something went wrong. Please try again.',
-            });
-        });
-    }
-});
-
         
-        /*document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', () => {
             let currentNoteId = null;
-
+            
             document.querySelectorAll('.review-btn').forEach(button => {
                 button.addEventListener('click', function () {
                     const noteId = this.getAttribute('data-note-id');
@@ -201,29 +108,29 @@ document.addEventListener('DOMContentLoaded', () => {
                     const noteKeyPoints = this.getAttribute('data-note-keypoints');
                     const noteContent = this.getAttribute('data-note-content');
                     const noteSummary = this.getAttribute('data-note-summary');
-
+                    
                     currentNoteId = noteId;
-
+                    
                     Swal.fire({
-                        title: `<h3 class="text-2xl font-bold mb-4 text-left">${note.title}</h3>`,
+                        title: `<h3 class="text-2xl font-bold mb-4 text-left">${noteTitle || 'No Title Provided'}</h3>`,
                         html: `
                             <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6 mb-4">
                                 <!-- Key Points -->
                                 <div class="p-4 bg-gray-100 shadow-md border border-gray-300 rounded-md text-left">
                                     <h2 class="text-lg font-semibold text-gray-700 mb-2">Key Points:</h2>
-                                    <p class="text-gray-600">${note.key_points || 'No key points provided.'}</p>
+                                    <p class="text-gray-600">${noteKeyPoints || 'No key points provided.'}</p>
                                 </div>
                                 <!-- Notes -->
                                 <div class="col-span-2 p-4 bg-gray-100 shadow-md border border-gray-300 rounded-md text-left">
                                     <h2 class="text-lg font-semibold text-gray-700 mb-2">Notes:</h2>
-                                    <p class="text-gray-600">${note.notes || 'No additional notes provided.'}</p>
+                                    <p class="text-gray-600">${noteContent || 'No additional notes provided.'}</p>
                                 </div>
                             </div>
-                                        
+                                    
                             <!-- Summary -->
                             <div class="p-4 bg-gray-100 shadow-md border border-gray-300 rounded-md text-left">
                                 <h2 class="text-lg font-semibold text-gray-700 mb-2">Summary:</h2>
-                                <p class="text-gray-600">${note.summary || 'No summary provided.'}</p>
+                                <p class="text-gray-600">${noteSummary || 'No summary provided.'}</p>
                             </div>
                         `,
                         showCancelButton: true,
@@ -245,7 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                 });
             });
-
+            
             function updateNoteStatus(noteId, action) {
                 fetch(`/reported-notes/${noteId}/${action}`, {
                     method: 'POST',
@@ -281,7 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                 });
             }
-        }); */
+        });
 
 
         </script>

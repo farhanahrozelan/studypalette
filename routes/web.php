@@ -93,8 +93,8 @@ Route::post('/reported-notes/{noteId}/{action}', [ReportController::class, 'revi
 Route::get('/analytics/approval-disapproval', [AnalyticsController::class, 'getApprovalDisapprovalData']);
 Route::get('/analytics/note-sharing', [AnalyticsController::class, 'getNoteSharing']);
 Route::get('/analytics/reported-notes-over-time', [AnalyticsController::class, 'getReportedNotesOverTime']);
-Route::get('/analytics/trending-issues', [AnalyticsController::class, 'getTrendingIssues']);
-Route::get('/analytics/trending-issues-categories', [AnalyticsController::class, 'getTrendingIssuesCategories']);
+Route::get('/analytics/reported-issues', [AnalyticsController::class, 'getReportedIssues']);
+Route::get('/analytics/reported-issues-categories', [AnalyticsController::class, 'getReportedIssuesCategories']);
 
 // UpdateNoteStatus route
 Route::put('/notes/{noteId}/status', [NoteController::class, 'updateNoteStatus'])
