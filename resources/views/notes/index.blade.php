@@ -12,7 +12,7 @@
                        class="bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-600">
                        <i class="fas fa-plus"></i>
                     </a>
-                </div> 
+                </div>  
 
                 <!-- Notes Grid -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
