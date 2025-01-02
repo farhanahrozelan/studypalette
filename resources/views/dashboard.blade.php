@@ -4,7 +4,7 @@
         <div class="content flex-grow overflow-y-auto bg-gray-100">
             <div class="dashboard-content flex flex-col items-center gap-6 p-6">
                 <!-- Center Content -->
-                <div class="max-w-4xl w-full space-y-6">
+                <div class="max-w-4xl w-full space-y-6 mx-auto">
 
                     <!-- Tasks Section -->
                     <div class="todo-box bg-white shadow rounded-lg p-6">
