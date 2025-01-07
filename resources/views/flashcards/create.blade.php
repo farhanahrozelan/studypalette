@@ -7,7 +7,7 @@
                 <h1 class="text-2xl font-bold text-gray-800">Create Flashcards</h1>
                 <a href="{{ route('flashcards.index') }}" 
                    class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded shadow-md transition duration-200">
-                    <i class="fas fa-arrow-left"></i> Back
+                    <i class="fas fa-arrow-left"></i> 
                 </a>
             </div>
 
@@ -36,12 +36,12 @@
 
                 <button type="button" id="add-flashcard" 
                         class="bg-blue-500 text-white px-4 py-2 rounded shadow-md transition duration-200 hover:bg-blue-600">
-                    <i class="fas fa-plus"></i> Add Flashcard
+                    <i class="fas fa-plus"></i> Flashcard
                 </button>
 
                 <button type="submit" 
                         class="bg-green-500 text-white px-4 py-2 rounded shadow-md transition duration-200 hover:bg-green-600 mt-4">
-                    Save Flashcards
+                    Save 
                 </button>
             </form>
         </div>
