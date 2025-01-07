@@ -18,7 +18,7 @@
                                 <input type="text" name="title" placeholder="Enter a new task"
                                        class="w-full p-2 border rounded-lg" required />
                                 <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded shadow">
-                                    Add 
+                                <i class="fas fa-plus"></i>
                                 </button>
                             </div>
                         </form>
@@ -45,7 +45,8 @@
                                 <form action="{{ route('tasks.destroy', $task->id) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="text-red-500 hover:text-red-700 transition">
+                                    <button type="submit" class="text-red-500 hover:text-red-700 transition"
+                                    >
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </form>

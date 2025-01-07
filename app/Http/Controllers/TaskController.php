@@ -61,9 +61,11 @@ public function getDashboardTasks()
         if ($task->user_id !== auth()->id()) {
             abort(403, 'Unauthorized action.');
         }
-
+    
         $task->delete();
-
-        return back();
+    
+        // Flash a success message to the session
+        return redirect()->route('tasks.index')->with('success', 'Task deleted successfully!');
     }
+    
 }

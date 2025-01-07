@@ -17,6 +17,7 @@
     },
     "dependencies": {
         "@fullcalendar/core": "^6.1.15",
-        "@fullcalendar/daygrid": "^6.1.15"
+        "@fullcalendar/daygrid": "^6.1.15",
+        "sweetalert2": "^11.15.10"
     }
 }

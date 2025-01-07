@@ -42,14 +42,15 @@
                                     </a>
 
                                     <!-- Delete -->
-                                    <form action="{{ route('flashcards.destroy', $set->id) }}" method="POST">
+                                    <form id="delete-set-form-{{ $set->id }}" action="{{ route('flashcards.destroy', $set->id) }}" method="POST">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="text-red-500 hover:text-red-700 transition"
-                                        onclick="showDeleteModal({{ $set->id }})">    
-                                            <i class="fas fa-trash"></i> 
-                                        </button>
-                                    </form>
+                                        <button type="button" class="text-red-500 hover:text-red-700 transition" 
+                                        onclick="showDeleteModal({{ $set->id }});">
+                                        <i class="fas fa-trash"></i> 
+                                    </button>
+                                </form>
+
                                 </div>
                             </div>
                         </div>
@@ -96,4 +97,25 @@
         };
     }
 </script>
+
+<script>
+    function showDeleteModal(setId) {
+        Swal.fire({
+            title: 'Delete Flashcard Set?',
+            text: 'This action will permanently delete this flashcard set.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33', // Red color for the confirm button
+            cancelButtonColor: '#3085d6', // Blue color for the cancel button
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Submit the form if confirmed
+                document.getElementById(`delete-set-form-${setId}`).submit();
+            }
+        });
+    }
+</script>
+
 @endsection

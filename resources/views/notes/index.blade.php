@@ -44,14 +44,14 @@
                                 </a>
 
                                 <!-- Delete -->
-                                <form action="{{ route('notes.destroy', $note->id) }}" method="POST">
+                                <form id="delete-form-{{ $note->id }}" action="{{ route('notes.destroy', $note->id) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="text-red-500 hover:text-red-700 transition"
-                                            onclick="return confirm('Are you sure you want to delete this note?');">
+                                    <button type="button" class="text-red-500 hover:text-red-700 transition" onclick="confirmDeletion({{ $note->id }});">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </form>
+
                             </div>
                         </div>
                     @empty
@@ -64,5 +64,23 @@
         </div>
     </div>
 </div>
+
+<script>
+    function confirmDeletion(noteId) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById(`delete-form-${noteId}`).submit();
+            }
+        });
+    }
+</script>
 @endsection
 </x-app-layout>

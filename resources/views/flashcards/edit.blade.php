@@ -4,7 +4,16 @@
 <div class="py-12">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-6">
+        <div class="flex justify-between items-center mb-6">
+
             <h1 class="text-2xl font-medium mb-6">Edit Flashcard Set</h1>
+
+              <!-- Back Button -->
+              <a href="{{ route('notes.index') }}" 
+                   class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded shadow-md transition duration-200">
+                   <i class="fas fa-arrow-left"></i>
+                </a>
+            </div>
 
             <form action="{{ route('flashcards.update', $flashcardSet->id) }}" method="POST">
                 @csrf
@@ -16,7 +25,8 @@
                     <input type="text" name="set_name" id="set_name" 
                            value="{{ old('set_name', $flashcardSet->name) }}"
                            class="w-full border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                </div>
+                
+                        </div>
 
                 <!-- Flashcards -->
                 <h2 class="text-lg font-medium mb-4">Flashcards</h2>
@@ -46,13 +56,13 @@
                 <div id="new-flashcards"></div>
                 <button type="button" onclick="addNewFlashcard()" 
                         class="bg-green-500 text-white px-4 py-2 rounded shadow hover:bg-green-600 mb-6">
-                    Add New Flashcard
+                        <i class="fas fa-plus"></i> New Flashcard
                 </button>
 
                 <!-- Submit -->
                 <div class="flex justify-end">
                     <button type="submit" class="bg-blue-500 text-white px-6 py-2 rounded shadow hover:bg-blue-600">
-                        Save Changes
+                        Save
                     </button>
                 </div>
             </form>

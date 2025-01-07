@@ -2,6 +2,7 @@ import './bootstrap';
 import { Calendar } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 
+
 document.addEventListener('DOMContentLoaded', function () {
     // Initialize Calendar
     const calendarEl = document.getElementById('calendar');

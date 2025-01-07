@@ -11,7 +11,7 @@
                 <!-- Back Button -->
                 <a href="{{ route('notes.index') }}" 
                    class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded shadow-md transition duration-200">
-                    Back
+                   <i class="fas fa-arrow-left"></i>
                 </a>
             </div>
 
@@ -72,7 +72,7 @@
                 <div class="flex justify-end">
                     <button type="submit"
                             class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded shadow-md transition duration-200">
-                        Save Changes
+                        Save 
                     </button>
                 </div>
             </form>
