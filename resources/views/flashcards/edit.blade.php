@@ -9,7 +9,7 @@
             <h1 class="text-2xl font-medium mb-6">Edit Flashcard Set</h1>
 
               <!-- Back Button -->
-              <a href="{{ route('notes.index') }}" 
+              <a href="{{ route('flashcards.index') }}" 
                    class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded shadow-md transition duration-200">
                    <i class="fas fa-arrow-left"></i>
                 </a>
